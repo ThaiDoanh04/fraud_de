@@ -1,0 +1,38 @@
+[project]
+name = "fraud-de"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "ThaiDoanh04", email = "doanhthai604204@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "confluent-kafka>=2.16.0",
+    "mlflow==3.16.1",
+]
+
+[project.scripts]
+fraud-de = "fraud_de:main"
+
+[build-system]
+requires = ["uv_build>=0.13.0,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.6.2",
+    "pytest>=9.1.1",
+    "ruff>=0.17.0",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
