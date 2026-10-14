@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    name: Lint, test, secrets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0              # gitleaks quét toàn bộ lịch sử commit
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync
+      - run: uv run pre-commit run --all-files --show-diff-on-failure
+      - run: uv run pytest
+      - name: Kiểm tra cú pháp docker-compose
+        run: |
+          cp .env.example .env
+          docker compose --env-file .env -f infra/docker-compose.yml config -q
+
+  smoke:
+    name: Dựng hệ thống và smoke test
+    needs: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - run: cp .env.example .env
+      - run: docker compose --env-file .env -f infra/docker-compose.yml up -d --build
+      - run: bash infra/scripts/smoke.sh
+      - name: In log nếu lỗi
+        if: failure()
+        run: |
+          docker compose --env-file .env -f infra/docker-compose.yml ps
+          docker compose --env-file .env -f infra/docker-compose.yml logs --tail 80
