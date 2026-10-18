@@ -34,3 +34,6 @@ test: ## Chạy test
 	uv run pytest
 
 check: lint test ## Chạy mọi thứ mà CI chạy
+
+load-data: ## Nạp dataset Kaggle vào Postgres
+	uv run --env-file .env python source/load_dataset.py
