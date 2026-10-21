@@ -25,3 +25,5 @@ CREATE TABLE IF NOT EXISTS transactions_history (
 );
 
 CREATE INDEX IF NOT EXISTS idx_txn_hist_time ON transactions_history (trans_date_trans_time);
+
+CREATE TABLE IF NOT EXISTS transactions (LIKE transactions_history INCLUDING ALL);
