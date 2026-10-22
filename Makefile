@@ -40,3 +40,9 @@ load-data: ## Nạp dataset Kaggle vào Postgres
 
 replay: ## Phát lại giao dịch, ví dụ: make replay ARGS="--reset --limit 20 --speed 3600"
 	uv run --env-file .env python source/replay.py $(ARGS)
+
+connect-register: ## Tạo/cập nhật connector Debezium (chạy lại nhiều lần được)
+	uv run --env-file .env python -c "import os; print(os.path.expandvars(open('ingestion/connectors/postgres-txn.json').read()))" \
+	| curl -sf -o /dev/null -X PUT -H "Content-Type: application/json" --data @- localhost:8083/connectors/postgres-txn/config
+	@sleep 5
+	curl -s localhost:8083/connectors/postgres-txn/status

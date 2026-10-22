@@ -1,0 +1,27 @@
+{
+  "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+  "plugin.name": "pgoutput",
+  "database.hostname": "postgres",
+  "database.port": "5432",
+  "database.user": "${POSTGRES_USER}",
+  "database.password": "${POSTGRES_PASSWORD}",
+  "database.dbname": "${POSTGRES_DB}",
+  "topic.prefix": "corebank",
+  "table.include.list": "public.transactions",
+  "slot.name": "debezium_txn",
+  "publication.name": "dbz_txn",
+  "publication.autocreate.mode": "filtered",
+
+  "column.exclude.list": "public.transactions.first,public.transactions.last,public.transactions.street",
+  "column.mask.hash.SHA-256.with.salt.${PII_SALT}": "public.transactions.cc_num",
+
+  "decimal.handling.mode": "double",
+  "time.precision.mode": "connect",
+
+  "transforms": "unwrap,route",
+  "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+  "transforms.unwrap.add.fields": "op,source.ts_ms",
+  "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
+  "transforms.route.regex": ".*",
+  "transforms.route.replacement": "txn.raw"
+}
