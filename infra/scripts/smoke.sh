@@ -28,6 +28,7 @@ wait_for "iceberg-rest"    curl -sf http://localhost:8181/v1/config
 wait_for "trino"           bash -c "curl -sf http://localhost:8080/v1/info | grep -q '\"starting\":false'"
 wait_for "redis"           bash -c "$COMPOSE exec -T redis redis-cli ping | grep -q PONG"
 wait_for "mlflow"          curl -sf http://localhost:5001/health
+wait_for "kafka-connect"  curl -sf http://localhost:8083/connector-plugins
 
 if (( failed == 0 )); then
   result=$($COMPOSE exec -T trino trino --output-format TSV --execute "
