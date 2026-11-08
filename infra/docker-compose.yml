@@ -208,7 +208,27 @@ services:
       interval: 10s
       timeout: 5s
       retries: 20
+  spark:
+    build: ./spark
+    image: fraud/spark:3.5.9
+    mem_limit: 2g
+    depends_on:
+      kafka: { condition: service_healthy }
+      minio: { condition: service_healthy }
+      iceberg-rest: { condition: service_started }
+      schema-registry: { condition: service_started }
+    environment:
+      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
+      AWS_REGION: us-east-1
+    volumes:
+      - ./spark/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf:ro
+      - ../ingestion/spark:/opt/jobs:ro          # code job PySpark (Bước 2)
+      - spark-checkpoints:/checkpoints           # Spark nhớ đã đọc Kafka tới đâu
+    command: ["/opt/spark/bin/spark-submit", "--driver-memory", "1g", "/opt/jobs/bronze_transactions.py"]
+    restart: unless-stopped            # tạm thời: Bước 2 thay bằng spark-submit job
 volumes:
   postgres-data:
   kafka-data:
   minio-data:
+  spark-checkpoints:

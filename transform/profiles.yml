@@ -1,0 +1,14 @@
+fraud:
+  outputs:
+    dev:
+      type: trino
+      method: none
+      user: dbt
+      host: localhost
+      port: 8080
+      http_scheme: http
+      database: iceberg
+      schema: silver
+      threads: 2
+
+  target: dev

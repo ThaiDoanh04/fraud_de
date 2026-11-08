@@ -46,3 +46,12 @@ connect-register: ## Tạo/cập nhật connector Debezium (chạy lại nhiều
 	| curl -sf -o /dev/null -X PUT -H "Content-Type: application/json" --data @- localhost:8083/connectors/postgres-txn/config
 	@sleep 5
 	curl -s localhost:8083/connectors/postgres-txn/status
+
+bronze-check: ## So số message Kafka txn.raw với số dòng bronze
+	@echo "Kafka (topic:partition:số message):"
+	@docker exec fraud-kafka-1 /opt/kafka/bin/kafka-get-offsets.sh --bootstrap-server localhost:9092 --topic txn.raw
+	@echo "Bronze:"
+	@docker exec fraud-trino-1 trino --execute "SELECT count(*) AS rows, count(DISTINCT _kafka_offset) AS distinct_offsets, max(_kafka_offset) + 1 AS last_offset_plus_1 FROM iceberg.bronze.transactions"
+
+silver: ## dbt build: tạo bảng silver + chạy test (cần Trino đang chạy)
+	uv run dbt build --project-dir transform --profiles-dir transform

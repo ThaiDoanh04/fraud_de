@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: bronze
+    database: iceberg
+    schema: bronze
+    tables:
+      - name: transactions
+        description: Dữ liệu thô từ Kafka txn.raw do Spark Streaming ghi.

@@ -8,3 +8,6 @@ __pycache__/
 # Raw datasets never go into git (Definition of Done).
 data/
 *.csv
+transform/target/
+transform/logs/
+transform/dbt_packages/

@@ -17,6 +17,8 @@ jobs:
       - run: uv sync
       - run: uv run pre-commit run --all-files --show-diff-on-failure
       - run: uv run pytest
+      - name: Kiểm tra project dbt
+        run: uv run dbt parse --project-dir transform --profiles-dir transform
       - name: Kiểm tra cú pháp docker-compose
         run: |
           cp .env.example .env

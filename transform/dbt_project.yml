@@ -1,0 +1,11 @@
+name: fraud
+version: "1.0.0"
+profile: fraud
+
+model-paths: ["models"]
+test-paths: ["tests"]
+
+models:
+  fraud:
+    silver:
+      +materialized: table

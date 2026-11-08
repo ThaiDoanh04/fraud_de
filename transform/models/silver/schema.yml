@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: transactions
+    description: Giao dịch đã chuẩn hoá kiểu, loại trùng theo trans_num, không chứa PII gốc.
+    columns:
+      - name: trans_num
+        data_tests: [unique, not_null]
+      - name: txn_ts
+        data_tests: [not_null]
+      - name: card_hash
+        data_tests: [not_null]
+      - name: amount
+        data_tests: [not_null]
+      - name: is_fraud
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+                quote: false
