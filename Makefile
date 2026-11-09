@@ -53,5 +53,5 @@ bronze-check: ## So số message Kafka txn.raw với số dòng bronze
 	@echo "Bronze:"
 	@docker exec fraud-trino-1 trino --execute "SELECT count(*) AS rows, count(DISTINCT _kafka_offset) AS distinct_offsets, max(_kafka_offset) + 1 AS last_offset_plus_1 FROM iceberg.bronze.transactions"
 
-silver: ## dbt build: tạo bảng silver + chạy test (cần Trino đang chạy)
+dbt-build: ## dbt build: tạo mọi bảng silver + gold và chạy test (cần Trino đang chạy)
 	uv run dbt build --project-dir transform --profiles-dir transform

@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: card_txn_features
+    description: Feature velocity theo thẻ, tính tại thời điểm từng giao dịch (chỉ nhìn quá khứ).
+    columns:
+      - name: trans_num
+        data_tests: [unique, not_null]
+      - name: card_hash
+        data_tests: [not_null]
+      - name: event_ts
+        data_tests: [not_null]
+      - name: card_txn_count_24h
+        description: Số giao dịch cùng thẻ trong 24 giờ trước giao dịch này (không tính chính nó).
+        data_tests: [not_null]
