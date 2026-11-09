@@ -1,6 +1,5 @@
 -- shortcut: build lại toàn bộ từ bronze mỗi lần chạy; khi bronze lên hàng chục triệu dòng thì chuyển sang incremental merge theo trans_num
-{{ config(properties={"partitioning": "ARRAY['day(txn_ts)']"}) }}
-
+{{ config(properties={"partitioning": "ARRAY['month(txn_ts)']"}) }}
 with deduped as (
     -- bronze có thể có trùng (Debezium gửi lại sau sự cố); giữ bản ghi Kafka mới nhất của mỗi giao dịch
     select
