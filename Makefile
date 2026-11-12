@@ -61,3 +61,6 @@ feast-apply: ## Đăng ký feature definitions vào registry Feast
 
 feast-check: ## Kiểm tra point-in-time join của Feast khớp với gold
 	uv run python features/check_pit.py
+
+train: ## Train LightGBM baseline qua Feast, log + đăng ký model trên MLflow
+	uv run python ml/train_baseline.py
