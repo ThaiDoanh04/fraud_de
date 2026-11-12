@@ -1,0 +1,20 @@
+project: fraud
+provider: local
+registry: data/registry.db             # danh bạ các feature đã đăng ký (file SQLite local)
+
+offline_store:                          # nơi lấy dữ liệu lịch sử để train: Trino -> Iceberg
+  type: trino
+  host: localhost
+  port: 8080
+  catalog: iceberg
+  user: feast
+  http-scheme: http
+  connector:
+    type: iceberg
+    file_format: parquet
+
+online_store:                           # nơi lấy feature khi chấm điểm real-time; Phase 3 sẽ đổi sang Redis
+  type: sqlite
+  path: data/online_store.db
+
+entity_key_serialization_version: 3

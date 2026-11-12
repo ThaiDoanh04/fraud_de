@@ -55,3 +55,9 @@ bronze-check: ## So số message Kafka txn.raw với số dòng bronze
 
 dbt-build: ## dbt build: tạo mọi bảng silver + gold và chạy test (cần Trino đang chạy)
 	uv run dbt build --project-dir transform --profiles-dir transform
+
+feast-apply: ## Đăng ký feature definitions vào registry Feast
+	mkdir -p features/data && cd features && uv run feast apply
+
+feast-check: ## Kiểm tra point-in-time join của Feast khớp với gold
+	uv run python features/check_pit.py

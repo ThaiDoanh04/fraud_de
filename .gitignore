@@ -11,3 +11,4 @@ data/
 transform/target/
 transform/logs/
 transform/dbt_packages/
+features/data/
