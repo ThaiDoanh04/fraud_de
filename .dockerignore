@@ -1,0 +1,7 @@
+.git
+.venv
+data
+features/data
+transform/target
+transform/logs
+**/__pycache__

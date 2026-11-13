@@ -228,6 +228,28 @@ services:
       - spark-checkpoints:/checkpoints           # Spark nhớ đã đọc Kafka tới đâu
     command: ["/opt/spark/bin/spark-submit", "--driver-memory", "1g", "/opt/jobs/bronze_transactions.py"]
     restart: unless-stopped            # tạm thời: Bước 2 thay bằng spark-submit job
+
+  scoring:
+    build:
+      context: ..                      # thư mục gốc repo (vì Dockerfile cần pyproject.toml, uv.lock)
+      dockerfile: serving/Dockerfile
+    image: fraud/scoring:0.1.0
+    mem_limit: 1g
+    depends_on:
+      mlflow: { condition: service_healthy }
+    environment:
+      MLFLOW_TRACKING_URI: http://mlflow:5000       # gọi MLflow qua mạng Docker
+      MLFLOW_ENABLE_PROXY_MULTIPART_DOWNLOAD: "false"
+      FEAST_REPO: /app/features
+    ports: ["8000:8000"]
+    volumes:
+      - ../features:/app/features                   # registry + online store do feast apply/materialize tạo ra
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
 volumes:
   postgres-data:
   kafka-data:
