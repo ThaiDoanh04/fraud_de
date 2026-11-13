@@ -64,3 +64,6 @@ feast-check: ## Kiểm tra point-in-time join của Feast khớp với gold
 
 train: ## Train LightGBM baseline qua Feast, log + đăng ký model trên MLflow
 	uv run python ml/train_baseline.py
+
+feast-materialize: ## Đẩy feature mới nhất của mỗi thẻ từ Iceberg lên online store
+	cd features && uv run feast materialize 2019-01-01T00:00:00 2021-01-01T00:00:00
