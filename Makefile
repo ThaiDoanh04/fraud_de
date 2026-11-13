@@ -67,3 +67,6 @@ train: ## Train LightGBM baseline qua Feast, log + đăng ký model trên MLflow
 
 feast-materialize: ## Đẩy feature mới nhất của mỗi thẻ từ Iceberg lên online store
 	cd features && uv run feast materialize 2019-01-01T00:00:00 2021-01-01T00:00:00
+
+serve: ## Chạy API chấm điểm ở localhost:8000 (cần MLflow + online store đã materialize)
+	MLFLOW_ENABLE_PROXY_MULTIPART_DOWNLOAD=false uv run uvicorn serving.app:app --port 8000

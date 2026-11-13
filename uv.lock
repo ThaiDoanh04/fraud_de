@@ -1116,11 +1116,13 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "confluent-kafka" },
+    { name = "fastapi" },
     { name = "feast", extra = ["trino"] },
     { name = "lightgbm" },
     { name = "mlflow" },
     { name = "psycopg", extra = ["binary"] },
     { name = "scikit-learn" },
+    { name = "uvicorn" },
 ]
 
 [package.dev-dependencies]
@@ -1135,11 +1137,13 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "confluent-kafka", specifier = ">=2.16.0" },
+    { name = "fastapi", specifier = ">=0.143.0" },
     { name = "feast", extras = ["trino"], specifier = ">=0.67.0" },
     { name = "lightgbm", specifier = ">=4.7.0" },
     { name = "mlflow", specifier = "==3.16.1" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.3.6" },
     { name = "scikit-learn", specifier = ">=1.9.1" },
+    { name = "uvicorn", specifier = ">=0.54.0" },
 ]
 
 [package.metadata.requires-dev]
